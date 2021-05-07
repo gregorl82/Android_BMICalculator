@@ -24,7 +24,10 @@ class MainActivity : AppCompatActivity() {
                     heightInCm = heightInput.toDouble(),
                     weightInKg = weightInput.toDouble()
                 )
-                findViewById<TextView>(R.id.tv_result_display).text = String.format("%.1f", bmi)
+                val bmiStatus = determineStatus(bmi)
+                val output = "${String.format("%.1f", bmi)}\n${bmiStatus}"
+
+                findViewById<TextView>(R.id.tv_result_display).text = output
             } else {
                 Toast.makeText(this, getString(R.string.message), Toast.LENGTH_LONG).apply {
                     setGravity(Gravity.CENTER, 0, 0)
@@ -38,5 +41,14 @@ class MainActivity : AppCompatActivity() {
         val heightInM = heightInCm / 100
 
         return (weightInKg / (heightInM * heightInM))
+    }
+
+    private fun determineStatus(bmi: Double): String {
+        return when (bmi) {
+            in 0.0..18.49 -> "Underweight"
+            in 18.5..24.99 -> "Healthy"
+            in 25.0..29.99 -> "Overweight"
+            else -> "Obese"
+        }
     }
 }
