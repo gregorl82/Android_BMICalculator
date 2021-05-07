@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
                     heightInCm = heightInput.toDouble(),
                     weightInKg = weightInput.toDouble()
                 )
-                findViewById<TextView>(R.id.tv_result_display).text = bmi.toString()
+                findViewById<TextView>(R.id.tv_result_display).text = String.format("%.1f", bmi)
             } else {
                 Toast.makeText(this, getString(R.string.message), Toast.LENGTH_LONG).apply {
                     setGravity(Gravity.CENTER, 0, 0)

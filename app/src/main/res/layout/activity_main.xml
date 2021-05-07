@@ -77,7 +77,11 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="6dp"
-        android:textSize="20sp"
+        android:paddingTop="20dp"
+        android:textStyle="bold"
+        android:textSize="40sp"
+        tools:text="25"
+        android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/calculate_button" />
 
