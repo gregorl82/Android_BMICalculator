@@ -1,23 +1,31 @@
 package com.example.bmicalculator
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import com.example.bmicalculator.databinding.ActivityMainBinding
 import com.google.android.material.textfield.TextInputEditText
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        findViewById<Button>(R.id.calculate_button)?.setOnClickListener {
+        binding.calculateButton.setOnClickListener {
             val heightInput =
-                findViewById<TextInputEditText>(R.id.height_in_cm)?.text.toString().trim()
+                binding.heightInCm.text.toString().trim()
             val weightInput =
-                findViewById<TextInputEditText>(R.id.weight_in_kg)?.text.toString().trim()
+                binding.weightInKg.text.toString().trim()
 
             if (heightInput.isNotEmpty() && weightInput.isNotEmpty()) {
                 val bmi = calculateBMI(
@@ -26,8 +34,11 @@ class MainActivity : AppCompatActivity() {
                 )
                 val bmiStatus = determineStatus(bmi)
                 val output = "${String.format("%.1f", bmi)}\n${bmiStatus}"
+                binding.tvResultDisplay.text = output
 
-                findViewById<TextView>(R.id.tv_result_display).text = output
+                clearFieldsFocus()
+                hideKeyboard(it)
+
             } else {
                 Toast.makeText(this, getString(R.string.message), Toast.LENGTH_LONG).apply {
                     setGravity(Gravity.CENTER, 0, 0)
@@ -50,5 +61,15 @@ class MainActivity : AppCompatActivity() {
             in 25.0..29.99 -> "Overweight"
             else -> "Obese"
         }
+    }
+
+    private fun clearFieldsFocus() {
+        binding.heightInputWrapper.clearFocus()
+        binding.weightInputWrapper.clearFocus()
+    }
+
+    private fun hideKeyboard(view: View) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
